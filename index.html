@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Lovely Rida</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .page {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 1s ease-in-out;
+            position: relative;
+            overflow: auto;
+            border: 2px solid #83b2e8;
+            overflow-y: auto;
+            overflow-x: hidden;
+
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        h1 {
+            color: #4a89dc;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            text-shadow: 1px 1px 3px rgba(150, 150, 150, 0.5);
+        }
+        
+        p {
+            color: #5d6d7e;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            background: linear-gradient(to right, #4776E6, #8E54E9);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(142, 84, 233, 0.4);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(142, 84, 233, 0.6);
+        }
+        
+        .heart {
+            position: absolute;
+            pointer-events: none;
+            animation: floatUp 4s linear;
+            opacity: 0;
+        }
+        
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(0.5);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .profile-pic {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 20px auto;
+            border: 5px solid #4a89dc;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .gallery {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        
+        .gallery img {
+            width: 30%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 3px solid white;
+        }
+        
+        .gallery img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .choices {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+        }
+        
+        .choice {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            width: 30%;
+        }
+        
+        .choice img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 3px solid #ddd;
+            transition: all 0.3s ease;
+        }
+        
+        .choice.selected img {
+            border-color: #4a89dc;
+            box-shadow: 0 0 20px rgba(74, 137, 220, 0.6);
+        }
+        
+        .choice p {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #4a89dc;
+        }
+        
+        .birthday-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .birthday-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(to right, #4776E6, #8E54E9);
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            animation: confetti 5s ease-in-out infinite;
+        }
+        
+        @keyframes confetti {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+        
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #4a89dc;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-y: auto; 
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Audio autoplay -->
+    <audio id="bg-music" src="music/musik.mp3" loop></audio>
+
+    <!-- Page 1: Welcome -->
+    <div class="page active" id="page1">
+        <h1>Happy Birthday My Lovely Rida!</h1>
+        <div class="profile-container">
+            <img src="images/rida.jpg" alt="Rida" class="profile-pic">
+        </div>
+        <p>Today is all about you, my dearest.</p>
+        <p>Click the button to begin your special surprise...</p>
+        <button class="btn" onclick="playMusic(); nextPage(1)">Continue ❤️</button>
+    </div>
+
+    <!-- Page 2: Romantic Greetings -->
+    <div class="page" id="page2">
+        <h1>My Precious Rida</h1>
+        <p>
+            Another year of beautiful memories with you. Your smile lights up my world, and your love fills my heart with joy. 
+            Every moment with you is a treasure, and I'm forever grateful that you were born.
+        </p>
+        <p>
+            Today, I celebrate not just your birthday, but everything you are - your kindness, your strength, your laughter.
+            You make every day brighter just by being you.
+        </p>
+        <div class="gallery">
+            <img src="images/together1.jpg" alt="Us Together 1">
+            <img src="images/together2.jpg" alt="Us Together 2">
+            <img src="images/together3.jpg" alt="Us Together 3">
+        </div>
+        <button class="btn" onclick="nextPage(2)">What's Next? ❤️</button>
+    </div>
+
+    <!-- Page 3: Choose a Gift -->
+    <div class="page" id="page3">
+        <h1>What Do You Want Most?</h1>
+        <p>Choose what you'd like for your special day:</p>
+        <div class="choices">
+            <div class="choice" onclick="selectChoice('flowers')">
+                <img src="images/flowers.jpg" alt="Flowers">
+                <p>Flowers</p>
+            </div>
+            <div class="choice" onclick="selectChoice('ring')">
+                <img src="images/ring.jpg" alt="Ring">
+                <p>Ring</p>
+            </div>
+            <div class="choice" onclick="selectChoice('me')">
+                <img src="images/me.jpg" alt="Me">
+                <p>Me</p>
+            </div>
+        </div>
+        <button class="btn" id="choiceBtn" disabled onclick="nextPage(3)">Continue ❤️</button>
+    </div>
+
+    <!-- Page 4: Final Card -->
+    <div class="page" id="page4">
+        <div class="birthday-card">
+            <h1>Happy Birthday, My Love</h1>
+            <p id="finalMessage">
+                On this special day, I want you to know how much you mean to me. 
+                Your smile brightens my darkest days, and your love gives me strength.
+                I promise to cherish every moment with you and make all your dreams come true.
+            </p>
+            <p>You chose: <span id="chosenGift" style="font-weight: bold; color: #4a89dc;"></span></p>
+            <p>And here it is, with all my love:</p>
+            <img id="giftImage" src="" alt="Your Gift" style="max-width: 300px; margin: 20px auto; border-radius: 10px; display: block;">
+            <p>I love you more than words can express.</p>
+            <p>Forever yours,</p>
+            <p style="font-style: italic; margin-top: 10px;">- Your loving partner</p>
+        </div>
+        <button class="btn" onclick="restartSurprise()">Start Over ❤️</button>
+    </div>
+
+    <script>
+        // Remove loading screen and unmute music
+        window.addEventListener('load', function () {
+            setTimeout(function () {
+                document.querySelector('.loading').style.display = 'none';
+
+                const music = document.getElementById('bg-music');
+                music.muted = false;
+                music.play().catch(() => {
+                    console.log('Autoplay blocked — user interaction needed.');
+                });
+            }, 1500);
+        });
+
+        // Create hearts following cursor
+        document.addEventListener('mousemove', function(e) {
+            createHeart(e.clientX, e.clientY);
+        });
+
+        function createHeart(x, y) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            
+            // Random heart color - shades of blue and pink
+            const colors = ['#4a89dc', '#83b2e8', '#ff6b81', '#ff8e9d', '#ffffff'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            heart.innerHTML = '❤';
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+            heart.style.fontSize = (10 + Math.random() * 20) + 'px';
+            heart.style.color = randomColor;
+            heart.style.transform = 'rotate(' + (Math.random() * 60 - 30) + 'deg)';
+            
+            document.body.appendChild(heart);
+            
+            // Remove heart after animation completes
+            setTimeout(() => {
+                heart.remove();
+            }, 4000);
+        }
+
+        // Page navigation
+        function nextPage(currentPage) {
+            document.getElementById('page' + currentPage).classList.remove('active');
+            document.getElementById('page' + (currentPage + 1)).classList.add('active');
+            
+            // Create confetti effect when moving to a new page
+            createConfetti();
+            
+            // If going to the final page, update the gift message
+            if (currentPage === 3) {
+                updateFinalMessage();
+            }
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#4a89dc', '#83b2e8', '#ff6b81', '#ffcd56', '#white'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                
+                // Random position, color, and size
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = -20 + 'px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = (5 + Math.random() * 10) + 'px';
+                confetti.style.height = (5 + Math.random() * 10) + 'px';
+                
+                // Random animation duration and delay
+                confetti.style.animationDuration = (3 + Math.random() * 5) + 's';
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                
+                document.body.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 8000);
+            }
+        }
+
+        // Handle gift choice selection
+        let selectedChoice = null;
+        
+        function selectChoice(choice) {
+            // Remove selection from all choices
+            document.querySelectorAll('.choice').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // Select the clicked choice
+            document.querySelector(`.choice[onclick="selectChoice('${choice}')"]`).classList.add('selected');
+            
+            // Enable the continue button
+            document.getElementById('choiceBtn').disabled = false;
+            
+            // Store the selected choice
+            selectedChoice = choice;
+        }
+
+        // Update final message based on choice
+        function updateFinalMessage() {
+            const chosenGiftElement = document.getElementById('chosenGift');
+            const giftImageElement = document.getElementById('giftImage');
+            const finalMessageElement = document.getElementById('finalMessage');
+            
+            let message = '';
+            
+            switch(selectedChoice) {
+                case 'flowers':
+                    chosenGiftElement.textContent = 'Beautiful Flowers';
+                    giftImageElement.src = 'images/flowers.jpg';
+                    message = 'Just like these flowers, our love blooms more beautifully with each passing day. Happy Birthday, my sweet Rida!';
+                    break;
+                case 'ring':
+                    chosenGiftElement.textContent = 'A Special Ring';
+                    giftImageElement.src = 'images/ring.jpg';
+                    message = 'This ring symbolizes my endless love for you, with no beginning and no end. May your birthday be as precious as you are to me, Rida!';
+                    break;
+                case 'me':
+                    chosenGiftElement.textContent = 'Me, Forever and Always';
+                    giftImageElement.src = 'images/me.jpg';
+                    message = 'You chose me, and I promise to be yours today, tomorrow, and for all the days to come. Happy Birthday, my beloved Rida!';
+                    break;
+                default:
+                    chosenGiftElement.textContent = 'A Surprise Gift';
+                    giftImageElement.src = 'images/surprise.jpg';
+                    message = 'Your wish is my command! Happy Birthday, my darling Rida!';
+            }
+            
+            finalMessageElement.textContent = message;
+        }
+
+        // Restart the surprise
+        function restartSurprise() {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show the first page
+            document.getElementById('page1').classList.add('active');
+            
+            // Reset the gift choice
+            selectedChoice = null;
+            document.querySelectorAll('.choice').forEach(el => {
+                el.classList.remove('selected');
+            });
+            document.getElementById('choiceBtn').disabled = true;
+            
+            // Create confetti for restart
+            createConfetti();
+        }
+
+        function playMusic() {
+            const audio = document.getElementById('bg-music');
+            audio.volume = 0.5;
+            audio.play();
+        }
+    </script>
+</body>
+</html>
